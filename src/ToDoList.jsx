@@ -1,8 +1,12 @@
 import {useState} from 'react';
 
+
+//TODO: save the ToDoList array in localStorage for that you should learn useEffect()
+//* Everything works fine upto now
+ 
 function ToDoList(){
     const [toDoList, setToDoList] = useState(Array());
-
+    
     function addToDoListItem(){
         const toDoListInput = document.querySelector('#toDoListInput').value;
         if(toDoListInput == ''){
