@@ -1,11 +1,24 @@
 import {useState} from 'react';
+import {CircleChevronUp, CircleChevronDown, SquareX} from 'lucide-react';
 
 
-//TODO: save the ToDoList array in localStorage for that you should learn useEffect()
-//* Everything works fine upto now
+//! BUG: localStorage works but there is a small bug should find out it
  
 function ToDoList(){
     const [toDoList, setToDoList] = useState(Array());
+    /*
+    useEffect(()=>{
+        if(localStorage.getItem('toDoListStorage')){
+            const arrayInLocalStorage = JSON.parse(localStorage.getItem('toDoListStorage'));
+            setToDoList(arrayInLocalStorage);
+        }
+        else{
+            localStorage.setItem('toDoListStorage',JSON.stringify(toDoList));
+        }
+    },[]);
+    */
+    
+    
     
     function addToDoListItem(){
         const toDoListInput = document.querySelector('#toDoListInput').value;
@@ -66,9 +79,10 @@ function ToDoList(){
                 {toDoList.map((item, itemIndex) => 
                 <li key={itemIndex}>
                     {item}
-                    <button onClick={()=>removeToDoListItem(itemIndex)}>X</button>
-                    <button onClick={()=>changeToDoListItemUp(itemIndex)}>Up</button>
-                    <button onClick={()=>changeToDoListItemDown(itemIndex)}>Down</button>
+                    <button onClick={()=>changeToDoListItemDown(itemIndex)}><CircleChevronDown /></button>
+                    <button onClick={()=>removeToDoListItem(itemIndex)}><SquareX /></button>
+                    <button onClick={()=>changeToDoListItemUp(itemIndex)}><CircleChevronUp /></button>
+                    
                 </li>
                 )}
             </ul>
