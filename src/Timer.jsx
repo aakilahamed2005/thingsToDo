@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 function Timer(){
-    const [seconds, setSeconds] = useState(0);
-    const [minutes, setMinutes] = useState(0);
-    const [hours, setHours] = useState(0);
+    const [timer, setTimer] = useState({hours:0,minutes:0,seconds:0});
     const [inputTime, setInputTime] = useState({hour:0,minute:0,second:0});
     const [isTimerStart, setIsTimerStart ] = useState(false);
     const interval = useRef(null);
@@ -12,16 +10,32 @@ function Timer(){
     useEffect(()=>{
         if(isTimerStart){
         interval.current = setInterval(()=>{
-            setSeconds(prev =>{
-                if(prev > 0){
-                    return prev - 1
+
+            setTimer(prev=>{
+                if(prev['seconds'] > 0){
+                    const sec = prev['seconds'] - 1 ;
+                    return {...prev, seconds:sec}
                 }
                 else{
-                    clearInterval(interval.current);
-                    return 0;
+                    if(prev['minutes'] > 0){
+                        const min = prev['minutes'] - 1;
+                        const sec = 59
+                        return {...prev, minutes:min, seconds:sec}
+                    }
+                    else if(prev['hours'] > 0){
+                        const hrs = prev['hours'] - 1;
+                        const min = 59;
+                        const sec = 59;
+                        return {hours:hrs, minutes:min, seconds:sec}
+                    }
+                    else{
+                        clearInterval(interval.current);
+                        return {hours:0, minutes:0, seconds:0}
+                    }
                 }
             });
-        },1000);
+
+        },1);
         }
         else{
             clearInterval(interval.current);
@@ -34,9 +48,11 @@ function Timer(){
 
 
     useEffect(()=>{
-        setSeconds(s=> s =inputTime.second);
-        setMinutes(m=> m =inputTime.minute);
-        setHours(h=> h =inputTime.hour);
+        setTimer({
+            hours:inputTime['hour'],
+            minutes:inputTime['minute'],
+            seconds:inputTime['second']
+        });
     },[inputTime]);
 
 
@@ -152,7 +168,15 @@ function Timer(){
 
     
     function startTimer(){
+        if(timer['hours']==0 && timer['minutes']==0 && timer['seconds']==0){
+            return null;
+        }
         setIsTimerStart(true);
+        const buttons = document.querySelectorAll('#btn');
+        buttons.forEach(button =>{
+            button.disabled = true;
+        })
+        
     }
 
     function pauseTimer(){
@@ -161,14 +185,20 @@ function Timer(){
 
     function resetTimer(){
         setIsTimerStart(false);
+        const buttons = document.querySelectorAll('#btn');
+        buttons.forEach(button =>{
+            button.disabled = false;
+        })
+        setTimer({hours:0,minutes:0,seconds:0})
+        setInputTime({hour:0,minute:0,second:0});
     }
 
     return(
         <>
         <h1>
-            <span id="hour">{hours.toString().padStart(2,'0')}</span>:
-            <span id="minute">{minutes.toString().padStart(2,'0')}</span>:
-            <span id="second">{seconds.toString().padStart(2,'0')}</span>
+            <span id="hour">{timer['hours'].toString().padStart(2,'0')}</span>:
+            <span id="minute">{timer['minutes'].toString().padStart(2,'0')}</span>:
+            <span id="second">{timer['seconds'].toString().padStart(2,'0')}</span>
         </h1>
         <button onClick={startTimer}>Start</button>
         <button onClick={pauseTimer}>Pause</button>
@@ -178,20 +208,20 @@ function Timer(){
         <div>
             {/* Hours input */}
             <h2>{inputTime['hour'].toString()} hrs</h2>
-            <button onClick={()=>timeIncrease('hourIncrease')}>Up</button>
-            <button onClick={()=>timeDecrease('hourDecrease')}>Down</button>
+            <button onClick={()=>timeIncrease('hourIncrease')} id="btn">Up</button>
+            <button onClick={()=>timeDecrease('hourDecrease')} id="btn">Down</button>
         </div>
         <div>
             {/* Minutes input */}
             <h2>{inputTime['minute'].toString()} min</h2>
-            <button onClick={()=>timeIncrease('minuteIncrease')}>Up</button>
-            <button onClick={()=>timeDecrease('minuteDecrease')}>Down</button>
+            <button onClick={()=>timeIncrease('minuteIncrease')} id="btn">Up</button>
+            <button onClick={()=>timeDecrease('minuteDecrease')} id="btn">Down</button>
         </div>
         <div>
             {/* Seconds input */}
             <h2>{inputTime['second'].toString()} sec</h2>
-            <button onClick={()=>timeIncrease('secondIncrease')}>Up</button>
-            <button onClick={()=>timeDecrease('secondDecrease')}>Down</button>
+            <button onClick={()=>timeIncrease('secondIncrease')} id="btn">Up</button>
+            <button onClick={()=>timeDecrease('secondDecrease')} id="btn">Down</button>
         </div>
         </>
     )
