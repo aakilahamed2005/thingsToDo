@@ -1,0 +1,230 @@
+$primary-color:#1B4242;
+$secondary-color:#092635;
+$text-light:#FFFFFF;
+$text-light-fade:#EEEEEE;
+$font:'Inter',Arial;
+
+*{
+    box-sizing: border-box;
+    font-family: $font;
+}
+
+/*Animation for timer circle to glow */
+@keyframes glow {
+    0%{box-shadow:0 0 30px 1px #fff;}
+    25%{box-shadow:0 0 40px 1px #fff;}
+    50%{box-shadow:0 0 50px 1px #fff;}
+    75%{box-shadow:0 0 40px 1px #fff;}
+    100%{box-shadow:0 0 30px 1px #fff;}
+}
+
+.glow-animation{
+    animation: glow 1s ;
+    animation-iteration-count: infinite;
+}
+::-webkit-scrollbar {
+  width: 10px;    
+  height: 10px;   
+  background-color: $secondary-color;       /* Width of the vertical scrollbar */             /* Height of the horizontal scrollbar */
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: #eeeeee45;
+}
+
+body{
+    background-color: $secondary-color;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+
+
+    .todolist-container{
+        flex-grow: 2;
+        width:60%;
+        background-color: $primary-color;
+        border-radius: 8px;
+        margin: 15px 15px 15px 15px;
+        padding: 20px;
+        height: 500px;
+        box-shadow: 0px 0px 20px 2px #315555;
+
+        h1{
+            color: $text-light;
+        }
+
+        input{
+            border: none;
+            outline: none;
+            font-size: 18px;
+            padding: 5px;
+            margin-right: 10px;
+            width: 300px;
+            padding-left: 10px;
+        }
+        button{
+            padding: 8px;
+            background-color: $primary-color;
+            border: 1px solid $text-light;
+            border-radius: 8px;
+            color: $text-light;
+            width: 60px;
+            transition: 0.3s;
+        }
+        button:hover{
+            background-color: $text-light;
+            color: $secondary-color;
+        }
+    
+        .items-container{
+            margin-top: 15px;
+            width: 100%;
+            height: 300px;
+            overflow-y: auto;
+          
+
+            ul{
+                list-style-type: none;
+                margin-left: -30px;
+
+                .item-box{
+                    background-color: #eeeeee45;
+                    border-radius: 3px;
+                    padding: 10px 18px 10px 18px;
+                    margin: 6px 10px 6px 0px;
+                    color: $text-light;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    .item{
+                        flex: 1 1 0;
+                        min-width: 0;      
+                    }
+                    .item p{
+                        margin: 0;
+                        white-space: normal;  
+                        word-wrap: break-word;
+                    }
+
+                    .item-handle-btn{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        flex-shrink: 0;           /* prevent buttons from shrinking */
+                        gap: 5px;
+                        align-items: center;
+
+                    }
+                }
+            }
+        }
+
+    }
+
+
+
+
+
+    /*Timer Styles*/
+    .timer-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-grow: 1;
+        background-color: $primary-color;
+        border-radius: 8px;
+        margin: 15px 10px 10px 15px;
+        padding: 30px 20px 30px 20px;
+        max-height: fit-content;
+        box-shadow: 0px 0px 20px 2px #315555;
+
+        .timer-circle{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: $text-light;
+            border-radius: 50%;
+            height: 200px;
+            width: 200px;
+            
+
+            .timer{
+            text-align: center;
+            font-family: $font;
+            color: $secondary-color;
+            }
+        }
+        
+        .timer-handle-btn-container{
+            margin-top: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+            .timer-handle-btn{
+            padding: 10px;
+            border-radius: 8px;
+            font-family: $font;
+            color: $text-light;
+            border: 1px solid $text-light;
+            background-color: #1B4242;
+            outline: none;
+            margin: 0px 10px 0px 10px;
+            transition: 0.3s;
+            }
+            .timer-handle-btn:hover{
+                background-color: #FFFFFF;
+                color: $secondary-color;
+            }
+        }
+
+        .time-settings-container{
+            display: flex;
+            flex-direction: row;
+            border: 1px solid $text-light;
+            margin-top: 30px;
+
+            .time-setting-slots{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                h2{
+                    color: $text-light;
+                    margin: 0px 10px 0px 10px;
+                }
+
+                .time-setting-btn-container{
+                    display: flex;
+                    flex-direction: column;
+
+                    button{
+                        height: 25px;
+                        background-color: $text-light;
+                        border: none;
+                        color: $secondary-color;
+                    }
+
+                    button:hover{
+                        background-color:$text-light-fade ;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+
+footer{
+    margin-top: 30px;
+    color: #eeeeee50;
+}
+footer::after{
+    content: "😎";
+}

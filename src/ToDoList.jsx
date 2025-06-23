@@ -1,24 +1,27 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {CircleChevronUp, CircleChevronDown, SquareX} from 'lucide-react';
 
-
-//! BUG: localStorage works but there is a small bug should find out it
  
 function ToDoList(){
-    const [toDoList, setToDoList] = useState(Array());
-    /*
+    const [toDoList, setToDoList] = useState([]);
+    const [updateLocalStorage, setUpdateLocalStorage] = useState(false);
+
     useEffect(()=>{
-        if(localStorage.getItem('toDoListStorage')){
-            const arrayInLocalStorage = JSON.parse(localStorage.getItem('toDoListStorage'));
-            setToDoList(arrayInLocalStorage);
+        const getlocalStorage = localStorage.getItem('toDoListStorage');
+        if(getlocalStorage != null){
+            setToDoList(JSON.parse(getlocalStorage));
         }
         else{
-            localStorage.setItem('toDoListStorage',JSON.stringify(toDoList));
+            localStorage.setItem('toDoListStorage',JSON.stringify([]));
         }
     },[]);
-    */
-    
-    
+
+    useEffect(()=>{
+        if(updateLocalStorage){
+        localStorage.setItem('toDoListStorage',JSON.stringify(toDoList));
+        }
+    },[updateLocalStorage, toDoList]);
+
     
     function addToDoListItem(){
         const toDoListInput = document.querySelector('#toDoListInput').value;
@@ -30,12 +33,14 @@ function ToDoList(){
         document.querySelector('#toDoListInput').value = '';
 
         setToDoList([...toDoList, toDoListInput]);
+        setUpdateLocalStorage(true);
     }
 
     function removeToDoListItem(itemIndex){
         //filter the items except the given indexed item and creates a new array
         const itemRemovedNewArray = toDoList.filter((_,i)=> itemIndex !== i);
         setToDoList(itemRemovedNewArray);
+        setUpdateLocalStorage(true);
 
     }
 
@@ -46,6 +51,7 @@ function ToDoList(){
             newSwappedList[itemIndex-1] = newSwappedList[itemIndex];
             newSwappedList[itemIndex] = temp;
             setToDoList(newSwappedList);
+            setUpdateLocalStorage(true);
         }
         else{
             return null;
@@ -60,6 +66,7 @@ function ToDoList(){
             newSwappedList[itemIndex+1] = newSwappedList[itemIndex];
             newSwappedList[itemIndex] = temp;
             setToDoList(newSwappedList);
+            setUpdateLocalStorage(true);
         }
         else{
             return null;
@@ -69,23 +76,26 @@ function ToDoList(){
 
 
     return(
-        <div>
+        <div className='todolist-container'>
             <h1>Things To Do</h1>
             <input type="text" id="toDoListInput" placeholder="Enter things to do"/>
             <button onClick={addToDoListItem}>Add</button>
 
-
-            <ul>
-                {toDoList.map((item, itemIndex) => 
-                <li key={itemIndex}>
-                    {item}
-                    <button onClick={()=>changeToDoListItemDown(itemIndex)}><CircleChevronDown /></button>
-                    <button onClick={()=>removeToDoListItem(itemIndex)}><SquareX /></button>
-                    <button onClick={()=>changeToDoListItemUp(itemIndex)}><CircleChevronUp /></button>
-                    
-                </li>
-                )}
-            </ul>
+            <div className='items-container'>
+                <ul>
+                    {toDoList.map((item, itemIndex) =>
+                    <li className="item-box" key={itemIndex}>
+                        <div className='item'><p>{item}</p></div>
+                        <div className='item-handle-btn'>
+                            <div onClick={()=>changeToDoListItemDown(itemIndex)}><CircleChevronDown /></div>
+                            <div onClick={()=>changeToDoListItemUp(itemIndex)}><CircleChevronUp /></div>
+                            <div onClick={()=>removeToDoListItem(itemIndex)}><SquareX /></div>
+                        </div>
+                    </li>
+                    )}
+                </ul>
+            </div>
+            
         </div>
     )
 }

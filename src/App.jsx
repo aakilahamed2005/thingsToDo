@@ -1,12 +1,16 @@
 import ToDoList from "./ToDoList.jsx";
 import Timer from "./Timer.jsx";
-import Test from "./Test.jsx";
+
 
 function App() {
 
   return (
     <>
-    <Test />
+    <div className="container">
+      <Timer />
+      <ToDoList/>
+      <footer>Designed & Developed by Aakil Ahamed</footer>
+    </div>
     </>
   )
 }

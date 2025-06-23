@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import {ChevronUp, ChevronDown} from 'lucide-react';
 
 function Timer(){
     const [timer, setTimer] = useState({hours:0,minutes:0,seconds:0});
@@ -12,6 +13,7 @@ function Timer(){
         interval.current = setInterval(()=>{
 
             setTimer(prev=>{
+                document.querySelector('.timer-circle').classList.add('glow-animation');
                 if(prev['seconds'] > 0){
                     const sec = prev['seconds'] - 1 ;
                     return {...prev, seconds:sec}
@@ -26,16 +28,18 @@ function Timer(){
                         const hrs = prev['hours'] - 1;
                         const min = 59;
                         const sec = 59;
+                        
                         return {hours:hrs, minutes:min, seconds:sec}
                     }
                     else{
                         clearInterval(interval.current);
+                        document.querySelector('.timer-circle').classList.remove('glow-animation');
                         return {hours:0, minutes:0, seconds:0}
                     }
                 }
             });
 
-        },1);
+        },1000);
         }
         else{
             clearInterval(interval.current);
@@ -181,6 +185,7 @@ function Timer(){
 
     function pauseTimer(){
         setIsTimerStart(false);
+        document.querySelector('.timer-circle').classList.remove('glow-animation');
     }
 
     function resetTimer(){
@@ -191,41 +196,54 @@ function Timer(){
         })
         setTimer({hours:0,minutes:0,seconds:0})
         setInputTime({hour:0,minute:0,second:0});
+        document.querySelector('.timer-circle').classList.remove('glow-animation');
     }
 
     return(
-        <>
-        <h1>
-            <span id="hour">{timer['hours'].toString().padStart(2,'0')}</span>:
-            <span id="minute">{timer['minutes'].toString().padStart(2,'0')}</span>:
-            <span id="second">{timer['seconds'].toString().padStart(2,'0')}</span>
-        </h1>
-        <button onClick={startTimer}>Start</button>
-        <button onClick={pauseTimer}>Pause</button>
-        <button onClick={resetTimer}>Reset</button>
-        
+        <div className="timer-container">
+            <div className="timer-circle">
+                <h1 className="timer">
+                    <span id="hour">{timer['hours'].toString().padStart(2,'0')}</span>:
+                    <span id="minute">{timer['minutes'].toString().padStart(2,'0')}</span>:
+                    <span id="second">{timer['seconds'].toString().padStart(2,'0')}</span>
+                </h1>
+            </div>
+            <div className="timer-handle-btn-container">
+                <button className="timer-handle-btn" onClick={startTimer}>Start</button>
+                <button className="timer-handle-btn" onClick={pauseTimer}>Pause</button>
+                <button className="timer-handle-btn" onClick={resetTimer}>Reset</button>
+            </div>
 
-        <div>
-            {/* Hours input */}
-            <h2>{inputTime['hour'].toString()} hrs</h2>
-            <button onClick={()=>timeIncrease('hourIncrease')} id="btn">Up</button>
-            <button onClick={()=>timeDecrease('hourDecrease')} id="btn">Down</button>
+            <div className="time-settings-container">
+                <div className="time-setting-slots">
+                    {/* Hours input */}
+                    <h2>{inputTime['hour'].toString()} hrs</h2>
+                    <div className="time-setting-btn-container">
+                        <button onClick={()=>timeIncrease('hourIncrease')} id="btn"><ChevronUp /></button>
+                        <button onClick={()=>timeDecrease('hourDecrease')} id="btn"><ChevronDown /></button>
+                    </div>
+                </div>
+                <div className="time-setting-slots">
+                    {/* Minutes input */}
+                    <h2>{inputTime['minute'].toString()} min</h2>
+                    <div className="time-setting-btn-container">
+                        <button onClick={()=>timeIncrease('minuteIncrease')} id="btn"><ChevronUp /></button>
+                        <button onClick={()=>timeDecrease('minuteDecrease')} id="btn"><ChevronDown /></button>
+                    </div>
+                </div>
+                <div className="time-setting-slots">
+                    {/* Seconds input */}
+                    <h2>{inputTime['second'].toString()} sec</h2>
+                    <div className="time-setting-btn-container">
+                        <button onClick={()=>timeIncrease('secondIncrease')} id="btn"><ChevronUp /></button>
+                        <button onClick={()=>timeDecrease('secondDecrease')} id="btn"><ChevronDown /></button>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div>
-            {/* Minutes input */}
-            <h2>{inputTime['minute'].toString()} min</h2>
-            <button onClick={()=>timeIncrease('minuteIncrease')} id="btn">Up</button>
-            <button onClick={()=>timeDecrease('minuteDecrease')} id="btn">Down</button>
-        </div>
-        <div>
-            {/* Seconds input */}
-            <h2>{inputTime['second'].toString()} sec</h2>
-            <button onClick={()=>timeIncrease('secondIncrease')} id="btn">Up</button>
-            <button onClick={()=>timeDecrease('secondDecrease')} id="btn">Down</button>
-        </div>
-        </>
     )
-}
+};
 
 
 
